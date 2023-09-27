@@ -1,1 +1,1 @@
-0x00. Shell, basics, and commands
+This the alx system engineering devops repo, containing system related projects
