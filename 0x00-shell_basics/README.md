@@ -1,1 +1,1 @@
-0x00. Shell, basics, and commands
+0x00. Shell, basics, commands, and system scripts.
