@@ -1,3 +1,2 @@
 #!/bin/bash
-[ $(id -u) -eq $(stat -c %u hello) ]
-sudo chown betty hello
+chown --from=guillaume betty hello
