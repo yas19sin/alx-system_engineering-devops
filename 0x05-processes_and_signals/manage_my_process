@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Print "I am alive!" inside file.
+while true; do
+	echo "I am alive!" >> /tmp/my_process
+	sleep 2
+done
