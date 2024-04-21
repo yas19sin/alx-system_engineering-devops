@@ -1,7 +1,6 @@
-# Install the Flask web framework via pip3
+# File: 1-install_a_package.pp
 
-package { 'flask':
-  ensure   => 'installed',
-  version  => '2.1.0',
-  provider => 'pip3',
+package { 'Flask':
+  ensure          => '2.1.0',
+  provider       => 'pip3',
 }
