@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 # Script to configure Nginx server with a custom HTTP response header
-apt-get -y update
-apt-get -y install nginx
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
-echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
-sed -i -e '/server_name _;/a\trewrite ^\/redirect_me https://worldsim.nousresearch.com permanent' \
-       -e '/include \/etc\/nginx\/sites-enabled\/\*;/a\tadd_header X-Served-By "$HOSTNAME";' \
-       -e '/error_page 404 \/custom_404.html;/{n;s/.*/\tlocation = \/custom_404.html {/;N;s/\n\t}/ root \/usr\/share\/nginx\/html; internal;/}' \
-       /etc/nginx/{sites-available/default,nginx.conf}
-service nginx start
+sudo apt-get update && sudo apt-get dist-upgrade -y
+sudo apt-get -y install nginx
+sudo service nginx start
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
+sudo sed -i -e '/listen 80 default_server;/a rewrite ^/redirect_me https://worldsim.nousresearch.com permanent;' \
+           -e '/listen 80 default_server;/{N;s/\n/\\\n/;s/$/\\\nerror_page 404 /\\\n\\tlocation = /\\\n\\t{\\n\\troot /usr/share/nginx/html;\\\n\\t\\tinternal;\\\n\\t}\\n\\tadd_header X-Served-By '$HOSTNAME'/}' \
+           /etc/nginx/sites-available/default
+sudo service nginx restart
