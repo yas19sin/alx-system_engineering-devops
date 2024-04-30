@@ -1,0 +1,30 @@
+# Installs a Nginx server with custome HTTP header
+
+# Update package cache
+exec {'update_package_cache':
+  provider  => shell,
+  command   => 'sudo apt-get -y update',
+}
+
+# Install nginx
+exec {'install_nginx':
+  provider  => shell,
+  command   => 'sudo apt-get -y install nginx',
+  require   => Exec['update_package_cache'],
+}
+
+# Add custom header to nginx configuration
+exec { 'add_custom_header':
+  provider    => shell,
+  environment => ["HOSTNAME=${hostname}"],
+  command     => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf',
+  require     => Exec['install_nginx'],
+}
+
+# Restart nginx
+exec { 'restart_nginx':
+  provider  => shell,
+  command   => 'sudo service nginx restart',
+  require   => Exec['add_custom_header'],
+}
+
