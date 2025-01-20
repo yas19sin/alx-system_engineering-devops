@@ -1,10 +1,49 @@
 #!/usr/bin/env bash
-# Script to configure Nginx server with a custom HTTP response header
-sudo apt-get update && sudo apt-get dist-upgrade -y
-sudo apt-get -y install nginx
-sudo service nginx start
-echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
-sudo sed -i -e '/listen 80 default_server;/a rewrite ^/redirect_me https://worldsim.nousresearch.com permanent;' \
-           -e '/listen 80 default_server;/{N;s/\n/\\\n/;s/$/\\\nerror_page 404 /\\\n\\tlocation = /\\\n\\t{\\n\\troot /usr/share/nginx/html;\\\n\\t\\tinternal;\\\n\\t}\\n\\tadd_header X-Served-By '$HOSTNAME'/}' \
-           /etc/nginx/sites-available/default
-sudo service nginx restart
+# Configures Nginx with a custom HTTP header
+
+# Update package list and install nginx
+apt-get update
+apt-get install -y nginx
+
+# Create nginx directories if they don't exist
+mkdir -p /var/www/html /etc/nginx/sites-available /etc/nginx/sites-enabled
+
+# Create default index page
+echo "Hello World!" > /var/www/html/index.html
+
+# Create custom 404 page
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+# Get the hostname of the server
+HOSTNAME=$(hostname)
+
+# Create Nginx configuration with custom header
+cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    add_header X-Served-By $HOSTNAME;
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+    location /redirect_me {
+        return 301 https://youtube.com/;
+    }
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}
+EOF
+
+# Create symbolic link if it doesn't exist
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Test nginx configuration
+nginx -t
+
+# Restart Nginx service
+service nginx restart
