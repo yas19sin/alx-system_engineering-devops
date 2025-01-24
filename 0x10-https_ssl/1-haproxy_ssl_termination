@@ -47,5 +47,5 @@ frontend lytenen-frontend-https
 
 backend lytenen-backend
         balance roundrobin
-        server 531073-web-01 34.204.61.66:80 check
-        server 531073-web-02 34.232.76.41:80 check
+        server 531073-web-01 52.91.151.122:80 check
+        server 531073-web-02 54.237.49.81:80 check
