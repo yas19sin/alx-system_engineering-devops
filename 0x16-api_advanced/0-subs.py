@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+A module that queries the Reddit API and returns the number of subscribers
+for a given subreddit.
+"""
 import requests
 
 
