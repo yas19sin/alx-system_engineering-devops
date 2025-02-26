@@ -23,7 +23,7 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
     }
     params = {"after": after} if after else {}
 
-    response = requests.get(url, headers=headers, params=params, 
+    response = requests.get(url, headers=headers, params=params,
                            allow_redirects=False)
 
     if response.status_code != 200:
@@ -36,9 +36,9 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
         title = post.get("data").get("title").lower()
         for word in word_list:
             word = word.lower()
-            # Split the title by non-alphanumeric characters
+
             split_title = [s for s in title.split() if s.isalnum()]
-            # Count occurrences of the word
+
             for s in split_title:
                 if s == word:
                     count_dict[word] += 1
@@ -47,7 +47,6 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
     if after:
         return count_words(subreddit, word_list, after, count_dict)
     else:
-        # Sort and print results
         sorted_counts = sorted(count_dict.items(),
                               key=lambda x: (-x[1], x[0]))
         for word, count in sorted_counts:
