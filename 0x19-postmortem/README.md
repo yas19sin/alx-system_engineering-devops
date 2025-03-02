@@ -18,7 +18,7 @@
 - **16:40 UTC** - Solution cautiously deployed to production. Engineers holding breath.
 - **17:00 UTC** - Service restored! High-fives exchanged. Incident report writing commenced.
 
-![Memory Leak Visualization](memory leaks.webp)
+![Memory Leak Visualization](memory_leaks.png)
 *Fig 1: What our memory usage looked like (artistic interpretation)*
 
 ## Root Cause: The Technical Autopsy
